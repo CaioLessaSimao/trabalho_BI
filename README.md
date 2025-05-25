@@ -126,10 +126,6 @@ scripts/pagamento_dump.sql
 
 Esse arquivo pode ser utilizado para restaurar o estado final do DW em outro ambiente.
 
-## Observações
-
-* O projeto pode ser estendido com novas dimensões (como conteúdo ou dispositivo de acesso) conforme novas necessidades analíticas forem identificadas.
-* A execução do ETL pode ser automatizada com ferramentas como Apache Airflow.
 
 ## Licença
 
