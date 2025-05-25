@@ -94,7 +94,7 @@ mysql-connector-python
 O script `main.py` realiza a extração de dados do banco relacional `dbnetf`, a transformação dos dados de acordo com o modelo dimensional e a carga no banco de dados `pagamento`.
 
 ```bash
-python scripts/main.py
+python main.py
 ```
 
 Ao final da execução, o banco `pagamento` conterá as tabelas dimensionais e a tabela fato com os dados processados.
