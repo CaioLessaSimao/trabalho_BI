@@ -54,25 +54,30 @@ def carregar_dim_localizacao():
     else:
         print("Dim_Localizacao já está atualizada.\n\n")
 
-
 # 3. Carregar Dim_Assinatura
 def carregar_dim_assinatura():
     df = pd.read_sql("""
     SELECT DISTINCT
         idPlano AS id,
-        1 AS EnumTipo,
         nmPlano AS `desc`
     FROM Plano
     """, con=relacional_engine)
 
     existentes = pd.read_sql("SELECT id FROM Dim_Assinatura", con=dimensional_engine)
-    novos = df[~df["id"].isin(existentes["id"])]
+    novos = df[~df["id"].isin(existentes["id"])].reset_index(drop=True)
 
     if not novos.empty:
+        # Adiciona EnumTipo incremental a partir de 1
+        novos["EnumTipo"] = range(1, len(novos) + 1)
+
+        # Reorganiza as colunas na ordem correta
+        novos = novos[["id", "EnumTipo", "desc"]]
+
         novos.to_sql('Dim_Assinatura', con=dimensional_engine, if_exists='append', index=False)
         print(f"Dim_Assinatura: {len(novos)} registros adicionados. \n\n")
     else:
         print("Dim_Assinatura já está atualizada. \n\n")
+
 
 # 4. Carregar Fato_Receita
 def carregar_fato_receita():
