@@ -1,6 +1,5 @@
 import pandas as pd
 import sqlalchemy
-import os
 
 # Conexões
 relacional_engine = sqlalchemy.create_engine("mysql+pymysql://root:rootpass123@localhost:3306/dbnetf")
@@ -9,7 +8,6 @@ dimensional_engine = sqlalchemy.create_engine("mysql+pymysql://root:rootpass123@
 # 1. Carregar Dim_Data
 def carregar_dim_data():
     df = pd.read_excel("Data.xls")
-    print("📋 Colunas no Excel:", df.columns.tolist())
 
     df_selecionado = df[[
         'date key', 'month', 'year', 'quarter'
@@ -25,9 +23,9 @@ def carregar_dim_data():
 
     if not novos.empty:
         novos.to_sql('Dim_Data', con=dimensional_engine, if_exists='append', index=False)
-        print(f"✅ Dim_Data: {len(novos)} registros adicionados.")
+        print(f"Dim_Data: {len(novos)} registros adicionados. \n\n")
     else:
-        print("ℹ️ Dim_Data já está atualizada.")
+        print("Dim_Data já está atualizada.\n\n")
 
 # 2. Carregar Dim_Localizacao
 def carregar_dim_localizacao():
@@ -52,9 +50,9 @@ def carregar_dim_localizacao():
         novos["id"] = range(proximo_id, proximo_id + len(novos))
 
         novos.to_sql('Dim_Localizacao', con=dimensional_engine, if_exists='append', index=False)
-        print(f"✅ Dim_Localizacao: {len(novos)} registros adicionados.")
+        print(f"Dim_Localizacao: {len(novos)} registros adicionados.\n\n")
     else:
-        print("ℹ️ Dim_Localizacao já está atualizada.")
+        print("Dim_Localizacao já está atualizada.\n\n")
 
 
 # 3. Carregar Dim_Assinatura
@@ -72,9 +70,9 @@ def carregar_dim_assinatura():
 
     if not novos.empty:
         novos.to_sql('Dim_Assinatura', con=dimensional_engine, if_exists='append', index=False)
-        print(f"✅ Dim_Assinatura: {len(novos)} registros adicionados.")
+        print(f"Dim_Assinatura: {len(novos)} registros adicionados. \n\n")
     else:
-        print("ℹ️ Dim_Assinatura já está atualizada.")
+        print("Dim_Assinatura já está atualizada. \n\n")
 
 # 4. Carregar Fato_Receita
 def carregar_fato_receita():
@@ -111,11 +109,11 @@ def carregar_fato_receita():
     
     if len(pagamentos_validos) < len(pagamentos):
         faltando = len(pagamentos) - len(pagamentos_validos)
-        print(f"⚠️ {faltando} pagamentos ignorados por não ter data correspondente na Dim_Data")
-        print("Primeiras datas faltantes:", list(ids_pagamentos - ids_existentes)[:5])
+        print(f"{faltando} pagamentos ignorados por não ter data correspondente na Dim_Data \n\n")
+        print("Primeiras datas faltantes:", list(ids_pagamentos - ids_existentes)[:5], "\n\n")
     
     if pagamentos_validos.empty:
-        print("❌ Nenhum pagamento com data válida encontrado!")
+        print("Nenhum pagamento com data válida encontrado!\n\n")
         return
     
     # Continuar com o resto do código usando pagamentos_validos
@@ -150,9 +148,9 @@ def carregar_fato_receita():
 
     if not novos.empty:
         novos.to_sql("Fato_Receita", con=dimensional_engine, if_exists="append", index=False)
-        print(f"✅ Fato_Receita: {len(novos)} registros adicionados.")
+        print(f"Fato_Receita: {len(novos)} registros adicionados.\n\n")
     else:
-        print("ℹ️ Fato_Receita já está atualizada.")
+        print("Fato_Receita já está atualizada. \n\n")
 
 # Execução principal
 if __name__ == "__main__":
@@ -160,4 +158,4 @@ if __name__ == "__main__":
     carregar_dim_localizacao()
     carregar_dim_assinatura()
     carregar_fato_receita()
-    print("🎉 ETL finalizado com sucesso.")
+    print("ETL finalizado com sucesso.\n\n")
