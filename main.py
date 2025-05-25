@@ -1,5 +1,6 @@
 import pandas as pd
 import sqlalchemy
+import os
 
 # Conexões
 relacional_engine = sqlalchemy.create_engine("mysql+pymysql://root:rootpass123@localhost:3306/dbnetf")
@@ -11,10 +12,10 @@ def carregar_dim_data():
     print("📋 Colunas no Excel:", df.columns.tolist())
 
     df_selecionado = df[[
-        'date key', 'month num overall', 'year', 'quarter'
+        'date key', 'month', 'year', 'quarter'
     ]].rename(columns={
         'date key': 'id',
-        'month num overall': 'mes',
+        'month': 'mes',
         'year': 'ano',
         'quarter': 'trimestre'
     })
